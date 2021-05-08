@@ -320,26 +320,47 @@ class DCLoad(InstrumentInterface):
     def TimeNow(self):
         "Returns a string containing the current time"
         return time.asctime()
+
+
+
+
+
+
+
+
+ # edits from here
+ # edit address lines being set to FF for now
+
+ # make this a global variable
+start = 0xAA
+address = 0xFF
+
+    def SetControlModeRemote(self):
+        msg = "Remote control"
+        on = 1
+        return self.SendIntegerToLoad(start, address, commands[0], on, msg, num_bytes=1)
+    def SetControlModePanel(self):
+        msg = "Panel control"
+        on = 0
+        return self.SendIntegerToLoad(start, address, commands[0], on, msg, num_bytes=1)
+
     def TurnLoadOn(self):
-        "Turns the load on"
         msg = "Turn load on"
         on = 1
-        return self.SendIntegerToLoad(0x21, on, msg, num_bytes=1)
+        return self.SendIntegerToLoad(start, address, commands[1], on, msg, num_bytes=1)
     def TurnLoadOff(self):
-        "Turns the load off"
         msg = "Turn load off"
         off = 0
-        return self.SendIntegerToLoad(0x21, off, msg, num_bytes=1)
-    def SetRemoteControl(self):
-        "Sets the load to remote control"
-        msg = "Set remote control"
-        remote = 1
-        return self.SendIntegerToLoad(0x20, remote, msg, num_bytes=1)
-    def SetLocalControl(self):
-        "Sets the load to local control"
-        msg = "Set local control"
-        local = 0
-        return self.SendIntegerToLoad(0x20, local, msg, num_bytes=1)
+        return self.SendIntegerToLoad(start, address, commands[1], on, msg, num_bytes=1)
+    
+    def SetMaxVoltage(self, voltage):
+        msg = "Set max voltage"
+        return self.SendIntegerToLoad(start, address, commands[2], voltage*self.convert_voltage, msg, num_bytes=4)
+    def GetMaxVoltage(self):
+        msg = "Get max voltage"
+        return self.GetIntegerFromLoad(start, address, commands[3], on, msg, num_bytes=4)/self.convert_voltage
+    
+    
     def SetMaxCurrent(self, current):
         "Sets the maximum current the load will sink"
         msg = "Set max current"
@@ -348,14 +369,6 @@ class DCLoad(InstrumentInterface):
         "Returns the maximum current the load will sink"
         msg = "Set max current"
         return self.GetIntegerFromLoad(0x25, msg, num_bytes=4)/self.convert_current
-    def SetMaxVoltage(self, voltage):
-        "Sets the maximum voltage the load will allow"
-        msg = "Set max voltage"
-        return self.SendIntegerToLoad(0x22, voltage*self.convert_voltage, msg, num_bytes=4)
-    def GetMaxVoltage(self):
-        "Gets the maximum voltage the load will allow"
-        msg = "Get max voltage"
-        return self.GetIntegerFromLoad(0x23, msg, num_bytes=4)/self.convert_voltage
     def SetMaxPower(self, power):
         "Sets the maximum power the load will allow"
         msg = "Set max power"
