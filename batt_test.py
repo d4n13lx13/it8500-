@@ -34,10 +34,16 @@ def TalkToLoad(load, port, baudrate):
     values = load.GetInputValues().split("\t")
     #wait for mode to switch (4th element in value array)
 
-    testpoints = pd.read_csv("filename.csv")
+    testtable = pd.read_csv("filename.csv")
+    print(testpoints)
+    #Assuming current points is the column named I,
+
+    amppoints = testtable.loc[:,"I"] #pandas series
+
     
-    '''
     time.sleep(1)
+    '''
+    
     with open('battery.csv', 'wb') as csvfile:
         csv_w = csv.writer(csvfile, delimiter=',')
         csv_w.writerow(['time','voltage','current','power'])
@@ -56,10 +62,10 @@ def TalkToLoad(load, port, baudrate):
             if values[4] == '0x0':
                 #test ended
                 break
-            time.sleep(10)
+            time.sleep(10)    
+    '''
     #set back to local
     test("Set to local control", load.SetLocalControl())
-    '''
 if __name__ == '__main__':
     port        = '/dev/ttyUSB0'
     baudrate    = 4800
