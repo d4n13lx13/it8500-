@@ -35,7 +35,7 @@ def TalkToLoad(load, port, baudrate):
 
     testtable = pd.read_csv("filename.csv")
     print(testtable)
-    # Assuming current points is the column named I,
+    # Assuming current points is the column named A,
 
     amppoints = testtable.loc[:, "A"]  # pandas series
 
