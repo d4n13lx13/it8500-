@@ -29,8 +29,6 @@ def TalkToLoad(load, port, baudrate):
     print("Function =", load.GetFunction())
 
     load.TurnLoadOn()
-
-    values = load.GetInputValues().split("\t")
     # wait for mode to switch (4th element in value array)
 
     testtable = pd.read_csv("filename.csv")
@@ -45,11 +43,6 @@ def TalkToLoad(load, port, baudrate):
         print(load.TimeNow())
         load.SetCCCurrent(i)
         print("batt I =", load.GetCCCurrent())
-           # if mode changes back to 0x0 then the test is over
-        if values[4] == '0x0':
-            # test ended
-            break
-        i
         time.sleep(10)
 
     # set back to local
